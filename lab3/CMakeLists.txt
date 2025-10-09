@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.15)
 
 
 
-set(PROJECT_NAME lab1)
+set(PROJECT_NAME lab3)
 project("${PROJECT_NAME}")
 
 
@@ -11,4 +11,4 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDART_REQUIRED TRUE)
 
 
-add_executable("${PROJECT_NAME}" lab1.cpp)
+add_executable("${PROJECT_NAME}" lab3.cpp)
