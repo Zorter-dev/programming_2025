@@ -2,10 +2,11 @@
 using namespace std;
 
 int main()
-{
+{   
+    setlocale(LC_ALL, "Russian");
     //Пункт 1
     int N;
-    cout << "Введите количество чисел в последовательности: " << endl;
+    cout << "Введите количество чисел в последовательности: ";
     cin >> N;
 
     if (N <= 0)
@@ -15,8 +16,8 @@ int main()
     else
     {
         long product = 1; // Произведение
-        int minNumber = 1'000'000; // Минимальное число
-        int minIndex = 0; // Номер минимального числа
+        int minNumber = std::numeric_limits<int>::max(); // Минимальное число
+        int minIndex = -1; // Номер минимального числа
         bool found = false; // Проверка на наличие чисел, оканчивающихся на 3
     
         cout << "Введите " << N << " чисел:" << endl;
@@ -29,7 +30,7 @@ int main()
             {
                 product *= num;
                 found = true;
-                if (num < minNumber)
+                if (num <= minNumber)
                 {
                     minNumber = num;
                     minIndex = i;
