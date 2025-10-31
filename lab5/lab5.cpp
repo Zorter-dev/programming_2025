@@ -58,23 +58,23 @@ int main() {
     std::cout << "Выбирите пункт (1 или 2): " << std::endl;
     std::cin >> choice;
 
-    std::cout << "Введите 3 числа: " << std::endl;
-    std::cin >> num1 >> num2 >> num3;
-
-    // находим количество введенных чисел
-    short cnt = 0;
-    if (num1 != 0) cnt++;
-    if (num2 != 0) cnt++;
-    if (num3 != 0) cnt++;
-
-    std::cout << "Количество чисел (не 0): " << cnt << std::endl;
-
     // проверяем, какая функция была выбрана
     if (choice == 1) {
         int result;
 
+        std::cout << "Введите 3 числа: " << std::endl;
+        std::cin >> num1 >> num2 >> num3;
+
+        // находим количество введенных чисел
+        short cnt = 0;
+        if (num1 != 0) cnt++;
+        if (num2 != 0) cnt++;
+        if (num3 != 0) cnt++;
+
+        std::cout << "Количество чисел (не 0): " << cnt << std::endl;
+
         // если среди 3 чисел одно было равно 0, записываем в переменные 2 оставшихся
-        if (cnt = 2) {
+        if (cnt == 2) {
             int a, b;
             if (num1 != 0 && num2 != 0) {
                 a = num1;
@@ -108,3 +108,4 @@ int main() {
 
     return 0;
 }
+
