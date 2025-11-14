@@ -2,12 +2,8 @@
 // Вариант 2
 
 // превращаем код лабы 1 в функцию
-void lab1() {
-    short a;// создание переменной с помощью short
-    short b;// создание переменной с помощью short
-    short h;// создание переменной с помощью short
+void lab1(short a, short b, short h) {
     float S;// создание переменной с плавающей точкой с помощью float
-    std::cin >> a >> b >> h;// input
     S = h * 0.5 * (a + b);// Вычисление площади трапеции
     std::cout << "Площадь трапеции: " << S << " float" << std::endl;// вывод результата
     std::cout << "short " << sizeof(short) << " бита, " << std::numeric_limits<short>::min() << " " << std::numeric_limits<short>::max() << std::endl;
@@ -100,7 +96,9 @@ int main() {
         }
     }
     else if (choice == 2) {
-        lab1();
+        short a, b, h;
+        std::cin >> a >> b >> h;
+        lab1(a, b, h);
     }
     else {
         std::cout << "Команды с таким номером нет" << std::endl;
