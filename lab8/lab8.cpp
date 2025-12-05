@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+// Вариант 2
 
 struct Book {
     std::string author;
