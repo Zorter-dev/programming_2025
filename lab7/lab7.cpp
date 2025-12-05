@@ -4,7 +4,7 @@
 #include <algorithm>
 // Вариант 2
 // Пункт 1
-/*
+
 std::vector<int> arr;
 
 //Просмотр массива
@@ -175,11 +175,11 @@ int main() {
     }
     return 0;
 }
-*/
+
 
 // Пункт 2
 
-
+/*
 const int Size = 10;
 std::array <int, Size> arr;
 
@@ -344,7 +344,7 @@ int main() {
 
     return 0;
 }
-
+*/
 
 // Пункт 3
 
