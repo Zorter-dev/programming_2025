@@ -65,6 +65,7 @@ void viewCollection () {
     }
 }
 
+// Создание нового сборника
 void createNewCollection () {
     std::string author;
     std::string title;
@@ -79,6 +80,7 @@ void createNewCollection () {
     std::cout << "Сборник создан" << std::endl;
 }
 
+// Добавление книги в сборник
 void addBook () {
     if (collections.empty()) {
         std::cout << "Необходимо создать сборник" << std::endl;
@@ -107,6 +109,7 @@ void addBook () {
     std::cout << "Введите номер тома: " << std::endl;
     std::cin >> tomNumber;
 
+    // Проверка на повторение номера тома
     Book* k = collection -> firstTom;
     while (k != nullptr) {
         if (k -> tomNumber == tomNumber) {
@@ -118,6 +121,8 @@ void addBook () {
 
     std::cout << "Введите количество страниц: " << std::endl;
     std::cin >> pageCount;
+
+    // Создание новой книги
     Book* newBook = new Book(collection -> author, collection -> title, tomNumber, pageCount);
     
     if (collection -> firstTom == nullptr || collection -> firstTom -> tomNumber > tomNumber) {
@@ -136,6 +141,7 @@ void addBook () {
     std::cout << "Книга добавлена в сборник" << std::endl;
 }
 
+// Поиск самого объемного произведения
 void findTheBiggestBook () {
     if (collections.empty()) {
         std::cout << "Нет созданных сборников" << std::endl;
@@ -165,6 +171,7 @@ void findTheBiggestBook () {
         return;
     }
 
+    // Поиск произведения с max количеством страниц
     Book* k = collection -> firstTom;
     Book* mostPages = k;
 
@@ -181,7 +188,9 @@ void findTheBiggestBook () {
     std::cout << "Количество страниц: " << mostPages -> pageCount << std::endl;
 }
 
+// Создание очереди чтения на лето
 void createReadingLine () {
+    // Очистка старой очереди
     Book* k = readingLine;
     while (k != nullptr) {
         Book* next = k -> nextOne;
@@ -300,7 +309,7 @@ void Examples () {
 
 // Очистка всех данных
 void clearAllData () {
-    // Очищение очереди чтения
+    // Очистка очереди чтения
     Book* k = readingLine;
     while (k != nullptr) {
         Book* next = k -> nextOne;
@@ -310,7 +319,7 @@ void clearAllData () {
     readingLine = nullptr;
     lineTail = nullptr;
 
-    // Очищение сборников
+    // Очистка сборников
     for (size_t i = 0; i < collections.size(); i++) {
         delete collections[i];
     }
