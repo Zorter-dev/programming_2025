@@ -10,18 +10,21 @@ struct Book {
     int pageCount;
     Book* nextOne;
 
+    // Создание нового тома
     Book(std::string auth, std::string titl, int tom, int pages)
         : author(auth), title(titl), tomNumber(tom), pageCount(pages), nextOne(nullptr) {}
 };
 
 struct BookCollection {
-    Book* firstTom;
-    std::string author;
-    std::string title;
+    Book* firstTom; // Указатель на первый том в цепочке
+    std::string author; // Автор сборника
+    std::string title; // Название сборника
 
+    // Создание сборника
     BookCollection (std::string auth, std::string titl)
         : author(auth), title(titl), firstTom(nullptr) {}
 
+    // Деструктор, при удалении сборника все тома также удаляются из памяти
     ~BookCollection() {
         Book* k = firstTom;
         while (k != nullptr) {
@@ -32,10 +35,11 @@ struct BookCollection {
     }
 };
 
-std::vector <BookCollection*> collections;
-Book* readingLine = nullptr;
-Book* lineTail = nullptr;
+std::vector <BookCollection*> collections; // Все сборники
+Book* readingLine = nullptr; // Начало очереди
+Book* lineTail = nullptr; // Конец очереди
 
+// Просмотр сборников
 void viewCollection () {
     if (collections.empty()) {
         std::cout << "Нет созданных сборников" << std::endl;
@@ -47,7 +51,7 @@ void viewCollection () {
         std::cout << "\nСборник номер" << i + 1 << ":\n";
         std::cout << "Автор: " << collections[i] -> author << "\n";
         std::cout << "Название: " << collections[i] -> title << "\n";
-        Book* k = collections[i] -> firstTom;
+        Book* k = collections[i] -> firstTom; // Проход по цепочке томов 
         if (k == nullptr) {
             std::cout << "Томов нет" << std::endl;
         }
@@ -193,6 +197,7 @@ void createReadingLine () {
         return;
     }
 
+    // Все книги из всех сборников
     std::vector<Book*> allBooks;
 
     for (size_t i = 0; i < collections.size(); i++) {
@@ -208,17 +213,18 @@ void createReadingLine () {
         return;
     }
 
+    // Добавляем по одной книге в очередь
     std::cout << "Добавление книг в очередь: " << std::endl;
 
     for (size_t i = 0; i < allBooks.size(); i++) {
-        std::cout << "Книга " << i + 1 << " из " << allBooks.size() << std::endl;
-        std::cout << allBooks[i] -> author << " - " << allBooks[i] -> title << " (Том " << allBooks[i] -> tomNumber << ")" << std::endl;
+        std::cout << "\nКнига " << i + 1 << " из " << allBooks.size() << ":\n";
+        std::cout << allBooks[i] -> author << " - " << allBooks[i] -> title << " (Том " << allBooks[i] -> tomNumber << ")\n";
 
         char choice;
-        std::cout << "Добавить в очередь? (да/нет): ";
+        std::cout << "Добавить в очередь? (y/n): ";
         std::cin >> choice;
 
-        if (choice == 'да' || choice == 'Да') {
+        if (choice == 'y' || choice == 'n') {
             if (readingLine == nullptr) {
                 readingLine = allBooks[i];
                 lineTail = allBooks[i];
@@ -238,6 +244,7 @@ void createReadingLine () {
     std::cout << "Очередь чтения создана" << std::endl;
 }
 
+// Просмотр очереди чтения на лето
 void viewReadingLine () {
     std::cout << "ОЧЕРЕДЬ ЧТЕНИЯ НА ЛЕТО" << std::endl;
     if (readingLine == nullptr) {
@@ -255,6 +262,7 @@ void viewReadingLine () {
     }
 }
 
+// Инициализация некоторых примеров
 void Examples () {
     std::cout << "ИНИЦИАЛИЗАЦИЯ ПРИМЕРАМИ" << std::endl;
 
@@ -290,7 +298,9 @@ void Examples () {
 
 }
 
+// Очистка всех данных
 void clearAllData () {
+    // Очищение очереди чтения
     Book* k = readingLine;
     while (k != nullptr) {
         Book* next = k -> nextOne;
@@ -300,6 +310,7 @@ void clearAllData () {
     readingLine = nullptr;
     lineTail = nullptr;
 
+    // Очищение сборников
     for (size_t i = 0; i < collections.size(); i++) {
         delete collections[i];
     }
@@ -376,6 +387,7 @@ int main() {
         }
     }
 
+    // Очистка памяти
     clearAllData();
     return 0;
 }
