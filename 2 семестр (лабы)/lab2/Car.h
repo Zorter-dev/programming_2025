@@ -40,5 +40,5 @@ public:
 
 private:
     bool isValidPlateNumber(const std::string& plate) const;
-    std::string generateRandomPlateNumber() const;
+    std::string generateRandomPlateNumber(const Car& other) const;
 };

@@ -1,6 +1,7 @@
 #include "Car.h"
 #include <cstdlib>
 #include <ctime>
+#include <unordered_set>
 
 int getRandomNumber(int min, int max) {
     static bool seeded = false;
@@ -50,48 +51,118 @@ Car& Car::operator=(const Car& other) {
 Car Car::operator+(const Car& other) const {
     std::cout << "Оператор '+' вызван" << std::endl;
     Car result;
-    result.brand = (this->brand != "Unknown") ? this->brand: other.brand;
-    result.plateNumber = generateRandomPlateNumber();
-    result.trunkItems = this->trunkItems;
-    for (const auto& item: other.trunkItems) {
-        result.trunkItems.push_back(item);
+    if (this->brand != "Unknown" && !this->brand.empty()) {
+        result.brand = this->brand;
     }
-    result.model = (this->model != "Unknown") ? this->model: "Unknown";
+    else {
+        result.brand = other.brand;
+    }
+    result.plateNumber = generateRandomPlateNumber(other);
+    result.trunkItems = this->trunkItems;
+    result.trunkItems.insert(result.trunkItems.end(), other.trunkItems.begin(), other.trunkItems.end());
+    if (this->model != "Unknown" && !this->model.empty()) {
+        result.model = this->model;
+    }
+    else {
+        result.model = other.model;
+    }
     return result;
 }
 
 Car Car::operator-(const Car& other) const {
     std::cout << "Оператор '-' вызван" << std::endl;
     Car result;
-    result.brand = (this->brand != "Unknown") ? this->brand: other.brand;
-    result.plateNumber = generateRandomPlateNumber();
-    result.trunkItems = this->trunkItems;
-    for (const auto& item: other.trunkItems) {
-        if (std::find(result.trunkItems.begin(), result.trunkItems.end(), item) == result.trunkItems.end()) {
-            result.trunkItems.push_back(item);
+    if (this->brand != "Unknown" && !this->brand.empty()) {
+        result.brand = this->brand;
+    }
+    else {
+        result.brand = other.brand;
+    }
+    result.plateNumber = generateRandomPlateNumber(other);
+
+    for (const auto& item1: this->trunkItems) {
+        bool foundInOther = false;
+        for (const auto& item2: other.trunkItems) {
+            if (item1 == item2) {
+                foundInOther = true;
+                break;
+            }
+        }
+        if (!foundInOther) {
+            bool duplicate = false;
+            for (const auto& itemR: result.trunkItems) {
+                if (item1 == itemR) {
+                    duplicate = true;
+                    break;
+                }
+            }
+            if (!duplicate) {
+                result.trunkItems.push_back(item1);
+            }
+        }
+    }
+    for (const auto& item2: other.trunkItems) {
+        bool inFirstCar = false;
+        for (const auto& item1: this->trunkItems) {
+            if (item2 == item1) {
+                inFirstCar = true;
+                break;
+            }
+        }
+        if (!inFirstCar) {
+            bool duplicate = false;
+            for (const auto& itemR: result.trunkItems) {
+                if (item2 == itemR) {
+                    duplicate = true;
+                    break;
+                }
+            }
+            if (!duplicate) {
+                result.trunkItems.push_back(item2);
+            }
         }
     }
 
-    result.model = (this->model != "Unknown") ? this->model: "Unknown";
+    if (this->model != "Unknown" && !this->model.empty()) {
+        result.model = this->model;
+    }
+    else {
+        result.model = other.model;
+    }
     return result;
 }
 
 Car Car::operator/(const Car& other) const {
     std::cout << "Оператор '/' вызван" << std::endl;
     Car result;
-    result.brand = other.brand;
-    result.plateNumber = generateRandomPlateNumber();
+    if (this->brand != "Unknown" && !this->brand.empty()) {
+        result.brand = this->brand;
+    }
+    else {
+        result.brand = other.brand;
+    }
+    result.plateNumber = generateRandomPlateNumber(other);
     for (const auto& item1: this->trunkItems) {
-        for(const auto& item2: other.trunkItems) {
+        bool found = false;
+        for (const auto& item2: other.trunkItems) {
             if (item1 == item2) {
-                if (std::find(result.trunkItems.begin(), result.trunkItems.end(), item1) == result.trunkItems.end()) {
-                    result.trunkItems.push_back(item1);
-                }
+                found = true;
                 break;
             }
         }
+        if (found) {
+            bool foundR = false;
+            for (const  auto& item: result.trunkItems) {
+                if (item1 == item) {
+                    foundR = true;
+                    break;
+                }
+            }
+            if (!foundR) {
+                result.trunkItems.push_back(item1);
+            }
+        }
     }
-
     result.model = other.model;
     return result;
 }
@@ -163,16 +234,27 @@ bool Car::isValidPlateNumber(const std::string& plate) const {
     return true;
 }
 
-std::string Car::generateRandomPlateNumber() const {
+std::string Car::generateRandomPlateNumber(const Car& other) const {
     std::string plate;
-    plate += static_cast<char>('А' + getRandomNumber(0, 32));
-    plate += std::to_string(getRandomNumber(0, 9));
-    plate += std::to_string(getRandomNumber(0, 9));
-    plate += std::to_string(getRandomNumber(0, 9));
-    plate += static_cast<char>('А' + getRandomNumber(0, 32));
-    plate += static_cast<char>('А' + getRandomNumber(0, 32));
-    if (plate == plateNumber) {
-        return generateRandomPlateNumber();
+    int attempts = 0;
+    const int MAX_ATTEMPTS = 100;
+
+    do {
+        plate = "";
+        plate += static_cast<char>('A' + getRandomNumber(0, 25));
+        plate += std::to_string(getRandomNumber(0, 9));
+        plate += std::to_string(getRandomNumber(0, 9));
+        plate += std::to_string(getRandomNumber(0, 9));
+        plate += static_cast<char>('A' + getRandomNumber(0, 25));
+        plate += static_cast<char>('A' + getRandomNumber(0, 25));
+        attempts++;
+        if (plate == this->plateNumber || plate == other.plateNumber) {
+        continue;
+    }
+    break;
+    } while (attempts < MAX_ATTEMPTS);
+    if (attempts >= MAX_ATTEMPTS) {
+        plate = "(НЕ УНИК.)" + plate;
     }
     return plate;
 }

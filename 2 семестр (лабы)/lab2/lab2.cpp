@@ -6,11 +6,11 @@ int main () {
     std::cout << "СОЗДАНИЕ АВТОМОБИЛЕЙ" << std::endl;
 
     std::vector<std::string> items1 = {"a", "б", "в"};
-    Car car1("A", "ModelA", "А777АА", items1);
+    Car car1("A", "ModelA", "A777AA", items1);
     car1.viewInfo();
 
     std::vector<std::string> items2 = {"в", "т", "к"};
-    Car car2("B", "ModelB", "Б777ББ", items2);
+    Car car2("B", "ModelB", "B777BB", items2);
     car2.viewInfo();
 
     std::cout << "КОНСТРУКТОР КОПИРОВАНИЯ" << std::endl;
@@ -35,7 +35,7 @@ int main () {
     carD.viewInfo();
 
     std::cout << "БАГАЖНИК" << std::endl;
-    Car testCar("Test", "Car", "Т123ТТ", {"запаска", "насос"});
+    Car testCar("Test", "Car", "T123TT", {"запаска", "насос"});
     testCar.viewInfo();
     testCar.addItemToTrunk("книга");
     testCar.viewInfo();
