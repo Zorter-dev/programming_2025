@@ -27,6 +27,10 @@ Radio& Radio::operator=(const Radio& other) {
     return *this;
 }
 
+bool Radio::operator==(const Radio& other) const {
+    return (brand == other.brand && model == other.model);
+}
+
 std::string Radio::getBrand() const {return brand;}
 std::string Radio::getModel() const {return model;}
 std::string Radio::getDescription() const {return description;}

@@ -27,27 +27,34 @@ std::vector<Car*> AutoWorkshop::getAttachedCars() const {return attachedCars;}
 
 void AutoWorkshop::setAddress(const std::string& addr) {address = addr;}
 
-void AutoWorkshop::addRadio(const Radio& radio) {
+bool AutoWorkshop::addRadio(const Radio& radio) {
+    for (const auto& exRadio : availableRadios) {
+        if (exRadio == radio) {
+            std::cout << "Магнитола уже есть в мастерской" << std::endl;
+            return false;
+        }
+    }
     availableRadios.push_back(radio);
     std::cout << "Магнитола " << radio.getBrand() << " " << radio.getModel() << " добавлена в мастерскую" << std::endl;
+    return true;
 }
 
-bool AutoWorkshop::removeRadio(const std::string& brand, const std::string& model) {
+bool AutoWorkshop::removeRadio(const Radio& radio) {
     for (auto i = availableRadios.begin(); i != availableRadios.end(); ++i) {
-        if (i->getBrand() == brand && i->getModel() == model) {
-           std::cout << "Магнитола " << brand << " " << model << " удалена из мастерской" << std::endl;
+        if (*i == radio) {
+           std::cout << "Магнитола " << radio.getBrand() << " " << radio.getModel() << " удалена из мастерской" << std::endl;
         availableRadios.erase(i);
         return true; 
         }
     }
-    std::cout << "Магнитола " << brand << " " << model << " не найдена в мастерской" << std::endl;
+    std::cout << "Магнитола " << radio.getBrand() << " " << radio.getModel() << " не найдена в мастерской" << std::endl;
     return false;
 }
 
-Radio* AutoWorkshop::findRadio(const std::string& brand, const std::string& model) {
-    for (auto& radio: availableRadios) {
-        if (radio.getBrand() == brand && radio.getModel() == model) {
-            return &radio;
+Radio* AutoWorkshop::findRadio(const Radio& radio) {
+    for (auto& exRadio: availableRadios) {
+        if (exRadio == radio) {
+            return &exRadio;
         }
     }
     return nullptr;
@@ -91,16 +98,17 @@ Car* AutoWorkshop::findCarByPlate(const std::string& plateNumber) {
     return nullptr;
 }
 
-bool AutoWorkshop::attachRadioToCar(const std::string& plateNumebr, const std::string& radioBrand, const std::string& radioModel) {
+bool AutoWorkshop::attachRadioToCar(const std::string& plateNumebr, const Radio& radio) {
     Car* car = findCarByPlate(plateNumebr);
     if (!car) {
         return false;
     }
-    Radio* radio = findRadio(radioBrand, radioModel);
-    if (!radio) {
+    Radio* foundRadio = findRadio(radio);
+    if (!foundRadio) {
+        std::cout << "магнитола не найдена в мастерской" << std::endl;
         return false;
     }
-    car->installRadio(radio);
+    car->installRadio(foundRadio);
     return true;
 }
 

@@ -26,14 +26,15 @@ public:
 
     void setAddress(const std::string& addr);
 
-    void addRadio(const Radio& radio);
-    bool removeRadio(const std::string &brand, const std::string &model);
-    Radio* findRadio(const std::string& brand, const std::string& model);
+    bool hasRadio(const Radio& radio);
+    bool addRadio(const Radio& radio);
+    bool removeRadio(const Radio& radio);
+    Radio* findRadio(const Radio& radio);
 
     bool attachCar(Car* car);
     bool detachCar(const std::string& plateNumber);
-    Car* findCarByPlate(const std::string& palteNumber);
-    bool attachRadioToCar(const std::string& palteNumebr, const std::string& radioBrand, const std::string& radioModel);
+    Car* findCarByPlate(const std::string& plateNumber);
+    bool attachRadioToCar(const std::string& plateNumebr, const Radio& radio);
 
     void viewInfo() const;
     void viewAttachedCars() const;

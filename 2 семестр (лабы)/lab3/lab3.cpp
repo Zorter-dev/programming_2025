@@ -44,6 +44,7 @@ std::cout << "--- СОЗДАНИЕ МАГНИТОЛ ---" << std::endl;
     workshop.addRadio(radio1);
     workshop.addRadio(radio2);
     workshop.addRadio(radio3);
+    workshop.addRadio(radio1);
     
     workshop.viewAvailableRadios();
     
@@ -56,8 +57,8 @@ std::cout << "--- СОЗДАНИЕ МАГНИТОЛ ---" << std::endl;
     
     // Прикручиваем магнитолы к автомобилям
     std::cout << "--- ПРИКРУЧИВАНИЕ МАГНИТОЛ К АВТОМОБИЛЯМ ---" << std::endl;
-    workshop.attachRadioToCar("A777AA", "Sony", "XM-DSX700");
-    workshop.attachRadioToCar("B888BB", "Pioneer", "DEH-S420BT");
+    workshop.attachRadioToCar("A777AA", radio1);
+    workshop.attachRadioToCar("B888BB", radio2);
     
     std::cout << "Информация об автомобилях после установки магнитол:" << std::endl;
     car1.viewInfo();
@@ -76,7 +77,7 @@ std::cout << "--- СОЗДАНИЕ МАГНИТОЛ ---" << std::endl;
     
     // Демонстрация удаления магнитолы из мастерской
     std::cout << "--- УДАЛЕНИЕ МАГНИТОЛЫ ИЗ МАСТЕРСКОЙ ---" << std::endl;
-    workshop.removeRadio("JVC", "KD-X371BT");
+    workshop.removeRadio(radio3);
     workshop.viewAvailableRadios();
     
     // Демонстрация скручивания пробега

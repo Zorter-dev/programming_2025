@@ -3,14 +3,12 @@
 #include <iostream>
 #include <string>
 
-class Radio {
-private:
+struct Radio {
     std::string brand;
     std::string model;
     std::string description;
     double price;
 
-public:
     Radio();
     Radio(const std::string& br, const std::string& mdl, const std::string& desc, double pr);
     Radio(const Radio& other);
@@ -30,4 +28,6 @@ public:
     void setPrice(double pr);
 
     void viewInfo() const;
+
+    bool operator==(const Radio& other) const;
 };
