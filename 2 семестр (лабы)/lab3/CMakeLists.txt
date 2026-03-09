@@ -7,8 +7,9 @@ project("${PROJECT_NAME}")
 
 
 set(CMAKE_CXX_STANDART 17)
-set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_CXX_STANDART_REQUIRED TRUE)
+set(CMAKE_CXX_STANDART_REQUIRED ON)
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-add_executable("${PROJECT_NAME}" lab3.cpp Car.cpp Radio.cpp AutoWorkshop.cpp)
+add_executable(${PROJECT_NAME} lab3.cpp Car.cpp src/Radio.cpp src/AutoWorkshop.cpp)

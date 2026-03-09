@@ -1,7 +1,6 @@
 #include "Car.h"
 #include <cstdlib>
 #include <ctime>
-#include <unordered_set>
 
 int getRandomNumber(int min, int max) {
     static bool seeded = false;

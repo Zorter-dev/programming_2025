@@ -1,8 +1,8 @@
 #include <iostream>
 #include "Car.h"
 #include <vector>
-#include "Radio.hpp"
-#include "AutoWorkshop.hpp"
+#include "include/Radio.hpp"
+#include "include/AutoWorkshop.hpp"
 
 void printLabReview() {
     std::cout << "ЛАБОРАТОРНАЯ РАБОТА" << std::endl;

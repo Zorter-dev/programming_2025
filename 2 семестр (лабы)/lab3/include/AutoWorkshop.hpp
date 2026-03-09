@@ -3,8 +3,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "Car.h"
 #include "Radio.hpp"
+class Car;
 
 class AutoWorkshop {
 private:

@@ -1,4 +1,5 @@
 #include "AutoWorkshop.hpp"
+#include "Car.h"
 
 AutoWorkshop::AutoWorkshop(): address("Unknown") {
     std::cout << "Конструктор по умолчанию вызван" << std::endl;
