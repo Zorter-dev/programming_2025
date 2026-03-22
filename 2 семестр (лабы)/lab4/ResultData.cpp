@@ -16,11 +16,13 @@ ResultData::ResultData(const QString& field1, const QString& field2,
     : m_field1(field1), m_field2(field2), m_field3(field3), m_field4(field4),
     m_publicationType(publicationType),
     m_isDetective(isDetective), m_isFantasy(isFantasy), m_isRoman(isRoman)
+    m_field1(field1), m_field2(field2), m_field3(field3), m_field4(field4), m_publicationType(publicationType), m_isDetective(isDetective), m_isFantasy(isFantasy), m_isRoman(isRoman)
 {
 }
 
 void ResultData::saveToFile(const QString& filename) const
 {
+void ResultData::saveToFile(const QString& filename) const {
     QFile file(filename);
     if (!file.open(QIODevice::Append | QIODevice::Text)) {
         qDebug() << "Не удалось открыть файл для записи";
