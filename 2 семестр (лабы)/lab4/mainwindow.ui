@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>650</width>
+    <height>500</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>(Вариант 2)</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <!-- Поле 1 -->
+    <item row="0" column="0">
+     <widget class="QLabel" name="label_field1">
+      <property name="text">
+       <string>Автор</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="lineEdit_field1"/>
+    </item>
+
+    <!-- Поле 2 -->
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_field2">
+      <property name="text">
+       <string>Название</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="lineEdit_field2"/>
+    </item>
+
+    <!-- Поле 3 -->
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_field3">
+      <property name="text">
+       <string>Код</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="lineEdit_field3"/>
+    </item>
+
+    <!-- Поле 4 -->
+    <item row="3" column="0">
+     <widget class="QLabel" name="label_field4">
+      <property name="text">
+       <string>Наполнение</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QLineEdit" name="lineEdit_field4"/>
+    </item>
+
+    <item row="4" column="0">
+     <widget class="QLabel" name="label_publicationType">
+      <property name="text">
+       <string>Тип издания</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QWidget" name="widget_publicationType">
+      <layout class="QHBoxLayout" name="horizontalLayout_publicationType">
+       <item>
+        <widget class="QRadioButton" name="radioButton_paper">
+         <property name="text">
+          <string>Бумажное</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="radioButton_electronic">
+         <property name="text">
+          <string>Электронное</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+
+    <item row="5" column="0">
+     <widget class="QLabel" name="label_genres">
+      <property name="text">
+       <string>Жанры</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <widget class="QWidget" name="widget_genres">
+      <layout class="QHBoxLayout" name="horizontalLayout_genres">
+       <item>
+        <widget class="QCheckBox" name="checkBox_detective">
+         <property name="text">
+          <string>Детектив</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBox_fantasy">
+         <property name="text">
+          <string>Фантастика</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBox_roman">
+         <property name="text">
+          <string>Роман</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+
+    <!-- Кнопки -->
+    <item row="6" column="0" colspan="2">
+     <layout class="QHBoxLayout" name="horizontalLayout_buttons">
+      <item>
+       <widget class="QPushButton" name="pushButton_reset">
+        <property name="text">
+         <string>Сброс</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_save">
+        <property name="text">
+         <string>Сохранить</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
