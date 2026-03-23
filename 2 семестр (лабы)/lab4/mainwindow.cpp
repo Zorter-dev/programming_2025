@@ -63,9 +63,7 @@ bool MainWindow::validateField4(const QString& text) {
 }
 
 void MainWindow::showError(const QString& fieldName) {
-    QMessageBox::warning(this, "Ошибка ввода",
-                         "Поле \"" + fieldName + "\" заполнено неверно!\n"
-                                                 "Проверьте формат ввода.");
+    QMessageBox::warning(this, "Ошибка ввода", "Поле \"" + fieldName + "\" заполнено неверно!\n" "Проверьте формат ввода.");
 }
 
 void MainWindow::clearErrorStyles() {
@@ -128,10 +126,7 @@ void MainWindow::on_pushButton_save_clicked() {
                         publicationType, isDetective, isFantasy, isRoman);
         data.saveToFile("result.txt");
 
-        QMessageBox::information(this, "Успех",
-                                 "Данные успешно сохранены в файл result.txt\n"
-                                 "Тип издания: " + publicationType + "\n"
-                                                         "Жанры: " + getSelectedGenres());
+        QMessageBox::information(this, "Успех", "Данные успешно сохранены в файл result.txt\n" "Тип издания: " + publicationType + "\n" "Жанры: " + getSelectedGenres());
 
         on_pushButton_reset_clicked();
     }
