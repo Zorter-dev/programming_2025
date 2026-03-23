@@ -10,12 +10,6 @@ ResultData::ResultData()
 }
 
 ResultData::ResultData(const QString& field1, const QString& field2, const QString& field3, const QString& field4, const QString& publicationType, bool isDetective, bool isFantasy, bool isRoman):
-<<<<<<< Updated upstream
-    m_field1(field1), m_field2(field2), m_field3(field3), m_field4(field4),
-    m_publicationType(publicationType),
-    m_isDetective(isDetective), m_isFantasy(isFantasy), m_isRoman(isRoman)
-=======
->>>>>>> Stashed changes
     m_field1(field1), m_field2(field2), m_field3(field3), m_field4(field4), m_publicationType(publicationType), m_isDetective(isDetective), m_isFantasy(isFantasy), m_isRoman(isRoman)
 {
 }
