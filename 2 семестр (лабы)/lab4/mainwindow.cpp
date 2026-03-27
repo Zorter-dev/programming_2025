@@ -24,7 +24,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     m_validatorField4 = nullptr;
 
-    ui->radioButton_paper->setChecked(true);
+    ui->radioButton_paper->setAutoExclusive(false);
+    ui->radioButton_electronic->setAutoExclusive(false);
+    ui->radioButton_paper->setChecked(false);
+    ui->radioButton_electronic->setChecked(false);
+    ui->radioButton_paper->setAutoExclusive(true);
+    ui->radioButton_electronic->setAutoExclusive(true);
 }
 
 MainWindow::~MainWindow()
@@ -63,7 +68,7 @@ bool MainWindow::validateField4(const QString& text) {
 }
 
 void MainWindow::showError(const QString& fieldName) {
-    QMessageBox::warning(this, "Ошибка ввода", "Поле \"" + fieldName + "\" заполнено неверно!\n" "Проверьте формат ввода.");
+    QMessageBox::warning(this, "Ошибка ввода", "Поле \"" + fieldName + "\" заполнено неверно\n" "Проверьте формат ввода.");
 }
 
 void MainWindow::clearErrorStyles() {
@@ -138,7 +143,12 @@ void MainWindow::on_pushButton_reset_clicked() {
     ui->lineEdit_field3->clear();
     ui->lineEdit_field4->clear();
 
-    ui->radioButton_paper->setChecked(true);
+    ui->radioButton_paper->setAutoExclusive(false);
+    ui->radioButton_electronic->setAutoExclusive(false);
+    ui->radioButton_paper->setChecked(false);
+    ui->radioButton_electronic->setChecked(false);
+    ui->radioButton_paper->setAutoExclusive(true);
+    ui->radioButton_electronic->setAutoExclusive(true);
 
     ui->checkBox_detective->setChecked(false);
     ui->checkBox_fantasy->setChecked(false);
