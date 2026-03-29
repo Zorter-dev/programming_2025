@@ -207,7 +207,7 @@
      <item>
       <widget class="QPushButton" name="pushButton_reset">
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(170, 0, 0);</string>
+        <string notr="true">background-color: rgb(255, 0, 0);</string>
        </property>
        <property name="text">
         <string>Сброс</string>
@@ -217,7 +217,7 @@
      <item>
       <widget class="QPushButton" name="pushButton_save">
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(50, 83, 29);</string>
+        <string notr="true">background-color: rgb(128, 255, 24);</string>
        </property>
        <property name="text">
         <string>Сохранить</string>
