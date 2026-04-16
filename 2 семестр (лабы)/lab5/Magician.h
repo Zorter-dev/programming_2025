@@ -14,7 +14,8 @@ public:
     int getMana() const;
     void setElement(const QString& element);
     void setMana(int mana);
-    QString craft() const override;
+    void craft(QWidget* parent) const override;
+
     QString getType() const override;
     QStringList getTableRow() const override;
     QString getDetails() const override;
@@ -27,8 +28,7 @@ public:
 private:
     QString m_element;
     int m_mana;
-
-    //флаг: true = стандартная картинка, false = случайныя из папки
     static bool s_useDefaultImages;
 };
+
 #endif // MAGICIAN_H

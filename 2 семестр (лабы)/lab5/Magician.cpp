@@ -1,10 +1,10 @@
 #include "Magician.h"
+#include "InfoDialog.h"
 #include <QRandomGenerator>
 #include <QDir>
 #include <QCoreApplication>
 #include <QDebug>
 
-// Инициализация флага
 bool Magician::s_useDefaultImages = false;
 
 void Magician::setUseDefaultImages(bool useDefault) {
@@ -13,20 +13,21 @@ void Magician::setUseDefaultImages(bool useDefault) {
 
 Magician::Magician() : NPC(), m_element("Unknown"), m_mana(0) {}
 
-Magician::Magician(const QString& name, const QString& element, int mana, int health, const Armor& armor):
-    NPC(name, health, armor), m_element(element), m_mana(mana) {}
+Magician::Magician(const QString& name, const QString& element, int mana, int health, const Armor& armor)
+    : NPC(name, health, armor), m_element(element), m_mana(mana) {}
 
 Magician::~Magician() {}
 
-QString Magician::getElement() const {return m_element;}
-int Magician::getMana() const {return m_mana;}
+QString Magician::getElement() const { return m_element; }
+int Magician::getMana() const { return m_mana; }
 
-void Magician::setElement(const QString& element) {m_element = element;}
-void Magician::setMana(int mana) {m_mana = mana;}
+void Magician::setElement(const QString& element) { m_element = element; }
+void Magician::setMana(int mana) { m_mana = mana; }
 
-QString Magician::craft() const {
-    return QString("Маг %1 колдует заклинание стихии %2! (Мана: %3)")
-        .arg(m_name, m_element, QString::number(m_mana));
+void Magician::craft(QWidget* parent) const
+{
+    InfoDialog dialog(this, parent);
+    dialog.exec();
 }
 
 QString Magician::getType() const {

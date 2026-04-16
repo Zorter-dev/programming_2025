@@ -5,8 +5,8 @@
 #include <QPixmap>
 #include <QFile>
 
-InfoDialog::InfoDialog(NPC* npc, QWidget *parent):
-    QDialog(parent), ui(new Ui::InfoDialog), m_npc(npc), m_printed(false)
+InfoDialog::InfoDialog(const NPC* npc, QWidget *parent)
+    : QDialog(parent), ui(new Ui::InfoDialog), m_npc(npc), m_printed(false)
 {
     ui->setupUi(this);
     displayInfo();
@@ -24,7 +24,7 @@ void InfoDialog::displayInfo() {
     if (!m_npc) return;
 
     QString details;
-    if (Magician* mag = dynamic_cast<Magician*>(m_npc)) {
+    if (const Magician* mag = dynamic_cast<const Magician*>(m_npc)) {
         details = QString("Тип: <b>Маг</b><br>"
                           "Имя: %1<br>"
                           "Стихия: <span style='color:%2;'>%3</span><br>"
@@ -40,7 +40,7 @@ void InfoDialog::displayInfo() {
                       .arg(mag->getHealth())
                       .arg(mag->getArmor().toString());
     }
-    else if (Enemy* enemy = dynamic_cast<Enemy*>(m_npc)) {
+    else if (const Enemy* enemy = dynamic_cast<const Enemy*>(m_npc)) {
         details = QString("Тип: <b>Враг</b><br>"
                           "Имя: %1<br>"
                           "Редкость: <span style='color:%2;'>%3</span><br>"
@@ -60,13 +60,7 @@ void InfoDialog::displayInfo() {
 }
 
 void InfoDialog::displayImage() {
-    QString imagePath;
-    if (Magician* mag = dynamic_cast<Magician*>(m_npc)) {
-        imagePath = mag->getImagePath();
-    } else if (Enemy* enemy = dynamic_cast<Enemy*>(m_npc)) {
-        imagePath = enemy->getImagePath();
-    }
-
+    QString imagePath = m_npc->getImagePath();
     QPixmap pixmap(imagePath);
     if (!pixmap.isNull()) {
         ui->imageLabel->setPixmap(pixmap.scaled(150, 150, Qt::KeepAspectRatio));
@@ -78,10 +72,10 @@ void InfoDialog::displayImage() {
 
 void InfoDialog::onPrintClicked() {
     m_printed = true;
-    close();
+    accept();
 }
 
 void InfoDialog::onCancelClicked() {
     m_printed = false;
-    close();
+    accept();
 }

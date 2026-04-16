@@ -13,17 +13,21 @@ class InfoDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit InfoDialog(NPC* npc, QWidget *parent = nullptr);
+    explicit InfoDialog(const NPC* npc, QWidget *parent = nullptr);
     ~InfoDialog();
+
     bool isPrinted() const { return m_printed; }
+
 private slots:
     void onPrintClicked();
     void onCancelClicked();
+
 private:
     Ui::InfoDialog *ui;
-    NPC* m_npc;
+    const NPC* m_npc;
     bool m_printed;
     void displayInfo();
     void displayImage();
 };
+
 #endif // INFODIALOG_H

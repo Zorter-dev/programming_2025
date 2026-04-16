@@ -122,19 +122,19 @@ void MainWindow::loadFromFile(const QString& filename, bool useDefaultImages) {
     file.close();
 
     QMessageBox::information(this, "Загрузка", QString("Загружено %1 НПС из файла %2")
-        .arg(m_npcs.size()).arg(filename));
+                                                   .arg(m_npcs.size()).arg(filename));
 }
 
 void MainWindow::onLoadButtonClicked()
 {
     QString filename = QFileDialog::getOpenFileName(this, "Выберите файл с данными", "", "Текстовые файлы (*.txt)");
     if (!filename.isEmpty()) {
-        loadFromFile(filename, false);  // false = использовать случайные картинки из папок
+        loadFromFile(filename, false);
     }
 }
 
 void MainWindow::onLoadPresetClicked() {
-    loadFromFile("data.txt", true);  // true = использовать стандартные картинки
+    loadFromFile("data.txt", true);
 }
 
 void MainWindow::onTableItemDoubleClicked(int row, int column) {
@@ -143,9 +143,8 @@ void MainWindow::onTableItemDoubleClicked(int row, int column) {
 
     NPC* npc = m_npcs[row];
     InfoDialog dialog(npc, this);
-    dialog.exec();
 
-    if (dialog.isPrinted()) {
+    if (dialog.exec() == QDialog::Accepted && dialog.isPrinted()) {
         delete npc;
         m_npcs.removeAt(row);
         ui->tableWidget->removeRow(row);

@@ -1,31 +1,33 @@
 #include "Enemy.h"
+#include "InfoDialog.h"  // ← подключаем диалог
 #include <QRandomGenerator>
 #include <QDir>
 #include <QCoreApplication>
 #include <QDebug>
 
-// Инициализация флага
 bool Enemy::s_useDefaultImages = false;
+
 void Enemy::setUseDefaultImages(bool useDefault) {
     s_useDefaultImages = useDefault;
 }
 
 Enemy::Enemy() : NPC(), m_rarity("Unknown"), m_damage(0) {}
 
-Enemy::Enemy(const QString& name, const QString& rarity, int damage, int health, const Armor& armor):
-    NPC(name, health, armor), m_rarity(rarity), m_damage(damage) {}
+Enemy::Enemy(const QString& name, const QString& rarity, int damage, int health, const Armor& armor)
+    : NPC(name, health, armor), m_rarity(rarity), m_damage(damage) {}
 
 Enemy::~Enemy() {}
 
-QString Enemy::getRarity() const {return m_rarity;}
-int Enemy::getDamage() const {return m_damage;}
+QString Enemy::getRarity() const { return m_rarity; }
+int Enemy::getDamage() const { return m_damage; }
 
-void Enemy::setRarity(const QString& rarity) {m_rarity = rarity;}
-void Enemy::setDamage(int damage) {m_damage = damage;}
+void Enemy::setRarity(const QString& rarity) { m_rarity = rarity; }
+void Enemy::setDamage(int damage) { m_damage = damage; }
 
-QString Enemy::craft() const {
-    return QString("Враг %1 (редкость: %2) атакует с уроном %3!")
-        .arg(m_name, m_rarity, QString::number(m_damage));
+void Enemy::craft(QWidget* parent) const
+{
+    InfoDialog dialog(this, parent);
+    dialog.exec();
 }
 
 QString Enemy::getType() const {

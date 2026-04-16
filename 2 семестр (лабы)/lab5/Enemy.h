@@ -14,7 +14,9 @@ public:
     int getDamage() const;
     void setRarity(const QString& rarity);
     void setDamage(int damage);
-    QString craft() const override;
+
+    void craft(QWidget* parent) const override;
+
     QString getType() const override;
     QStringList getTableRow() const override;
     QString getDetails() const override;
@@ -28,4 +30,5 @@ private:
     int m_damage;
     static bool s_useDefaultImages;
 };
+
 #endif // ENEMY_H
