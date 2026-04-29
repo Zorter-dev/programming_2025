@@ -4,11 +4,10 @@
 #include <QWidget>
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class ShieldCreator; }
+namespace Ui {class ShieldCreator;}
 QT_END_NAMESPACE
 
-class ShieldCreator : public QWidget
-{
+class ShieldCreator : public QWidget {
     Q_OBJECT
 
 public:

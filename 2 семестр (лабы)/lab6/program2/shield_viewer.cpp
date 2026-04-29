@@ -14,14 +14,12 @@ ShieldViewer::ShieldViewer(QWidget *parent)
 {
     ui->setupUi(this);
 
-    // Настройка таблицы корректных щитов (4 колонки)
     QStringList headers = {"Название", "Описание", "Коэф. защиты", "Тип защиты"};
     ui->tableValid->setColumnCount(4);
     ui->tableValid->setHorizontalHeaderLabels(headers);
     ui->tableValid->horizontalHeader()->setStretchLastSection(true);
     ui->tableValid->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-    // Настройка таблицы битых щитов (4 колонки)
     ui->tableInvalid->setColumnCount(4);
     ui->tableInvalid->setHorizontalHeaderLabels(headers);
     ui->tableInvalid->horizontalHeader()->setStretchLastSection(true);
@@ -35,9 +33,38 @@ ShieldViewer::~ShieldViewer()
     delete ui;
 }
 
+// Функция проверки корректности коэффициента защиты
+bool ShieldViewer::isDefenseFactorValid(const QString& str, bool& hasLeadingZero, bool& hasComma)
+{
+    hasLeadingZero = false;
+    hasComma = false;
+
+    if (str.isEmpty()) return false;
+
+    // проверка на запятую вместо точки
+    if (str.contains(',')) {
+        hasComma = true;
+        return false;
+    }
+
+    // проверка на ноль в начале
+    if (str.length() > 1 && str.startsWith('0') && !str.startsWith("0.")) {
+        hasLeadingZero = true;
+        return false;
+    }
+
+    bool ok;
+    double value = str.toDouble(&ok);
+    if (!ok) return false;
+
+    if (value < 0 || value > 100) return false;
+
+    return true;
+}
+
 void ShieldViewer::updateTables()
 {
-    // Корректные щиты
+    // корректные щиты
     ui->tableValid->setRowCount(0);
     int validRow = 0;
     for (const ShieldData& shield : m_shields) {
@@ -46,10 +73,10 @@ void ShieldViewer::updateTables()
             ui->tableValid->setItem(validRow, 0, new QTableWidgetItem(shield.name));
             ui->tableValid->setItem(validRow, 1, new QTableWidgetItem(shield.description));
 
-            // Отображаем коэффициент защиты (для корректных всегда число)
             if (shield.defenseFactor.isDouble()) {
                 ui->tableValid->setItem(validRow, 2, new QTableWidgetItem(QString::number(shield.defenseFactor.toDouble())));
-            } else {
+            }
+            else {
                 ui->tableValid->setItem(validRow, 2, new QTableWidgetItem(shield.defenseFactor.toString()));
             }
 
@@ -58,7 +85,7 @@ void ShieldViewer::updateTables()
         }
     }
 
-    // Битые щиты - подсвечиваем красным неверные поля (без указания ошибки)
+    // битые щиты
     ui->tableInvalid->setRowCount(0);
     int invalidRow = 0;
     for (const ShieldData& shield : m_shields) {
@@ -70,14 +97,13 @@ void ShieldViewer::updateTables()
             QTableWidgetItem* defenseItem = new QTableWidgetItem();
             QTableWidgetItem* typeItem = new QTableWidgetItem(shield.protectionType);
 
-            // Отображаем коэффициент защиты (как есть)
             if (shield.defenseFactor.isDouble()) {
                 defenseItem->setText(QString::number(shield.defenseFactor.toDouble()));
-            } else {
+            }
+            else {
                 defenseItem->setText(shield.defenseFactor.toString());
             }
 
-            // ★★★ ТОЛЬКО ПОДСВЕТКА КРАСНЫМ, БЕЗ ТЕКСТА ОШИБКИ ★★★
             if (shield.name.trimmed().isEmpty()) {
                 nameItem->setBackground(Qt::red);
                 nameItem->setForeground(Qt::white);
@@ -88,17 +114,27 @@ void ShieldViewer::updateTables()
                 descItem->setForeground(Qt::white);
             }
 
-            // Коэффициент защиты: если не число или вне диапазона
             bool isNumber = shield.defenseFactor.isDouble();
-            double defenseVal = isNumber ? shield.defenseFactor.toDouble() : -1;
 
-            if (!isNumber || defenseVal < 0 || defenseVal > 100) {
+            QString defenseStr;
+            if (isNumber) {
+                defenseStr = QString::number(shield.defenseFactor.toDouble());
+            }
+            else {
+                defenseStr = shield.defenseFactor.toString();
+            }
+
+            bool hasLeadingZero = false;
+            bool hasComma = false;
+            bool defenseValid = isDefenseFactorValid(defenseStr, hasLeadingZero, hasComma);
+
+            if (!defenseValid || !isNumber) {
                 defenseItem->setBackground(Qt::red);
                 defenseItem->setForeground(Qt::white);
             }
 
             QString type = shield.protectionType.trimmed().toLower();
-            if (type != "физический" && type != "магический" && type != "общий") {
+            if (type != "physical" && type != "magic" && type != "general") {
                 typeItem->setBackground(Qt::red);
                 typeItem->setForeground(Qt::white);
             }
@@ -114,7 +150,7 @@ void ShieldViewer::updateTables()
 
 void ShieldViewer::saveSeparateFiles()
 {
-    // Сохраняем корректные щиты
+    // сохраняем корректные щиты
     QJsonArray validArray;
     for (const ShieldData& shield : m_shields) {
         if (shield.isValid) {
@@ -134,7 +170,7 @@ void ShieldViewer::saveSeparateFiles()
         validFile.close();
     }
 
-    // Сохраняем битые щиты
+    // сохраняем битые щиты
     QJsonArray invalidArray;
     for (const ShieldData& shield : m_shields) {
         if (!shield.isValid) {
@@ -210,12 +246,25 @@ void ShieldViewer::loadJson()
             shield.isValid = false;
         }
 
-        if (!shield.defenseFactor.isDouble()) {
+        bool hasLeadingZero = false;
+        bool hasComma = false;
+
+        QString defenseStr;
+        if (shield.defenseFactor.isDouble()) {
+            defenseStr = QString::number(shield.defenseFactor.toDouble());
+        }
+        else {
+            defenseStr = shield.defenseFactor.toString();
+        }
+
+        bool defenseValid = isDefenseFactorValid(defenseStr, hasLeadingZero, hasComma);
+
+        if (!defenseValid) {
             shield.isValid = false;
         }
 
         QString type = shield.protectionType.trimmed().toLower();
-        if (type != "физический" && type != "магический" && type != "общий") {
+        if (type != "physical" && type != "magic" && type != "general") {
             shield.isValid = false;
         }
 

@@ -13,6 +13,8 @@ ShieldCreator::ShieldCreator(QWidget *parent)
     , ui(new Ui::ShieldCreator)
 {
     ui->setupUi(this);
+
+    // подключаем сигналы
     connect(ui->btnLoadTxt, &QPushButton::clicked, this, &ShieldCreator::loadFromTxt);
     connect(ui->btnOk, &QPushButton::clicked, this, &ShieldCreator::saveToJson);
 }
@@ -34,65 +36,38 @@ void ShieldCreator::loadFromTxt()
     }
 
     QTextStream in(&file);
-    int lineNumber = 0;
-    int addedCount = 0;
-
-    // загружаем существующий JSON файл или создаем новый
-    QJsonArray shieldsArray;
-    QFile jsonFile("shields.json");
-    if (jsonFile.exists() && jsonFile.open(QIODevice::ReadOnly)) {
-        QByteArray data = jsonFile.readAll();
-        jsonFile.close();
-        QJsonDocument doc = QJsonDocument::fromJson(data);
-        if (doc.isArray()) {
-            shieldsArray = doc.array();
-        }
-    }
-
-    while (!in.atEnd()) {
-        QString line = in.readLine();
-        line = line.trimmed();
-        if (line.isEmpty()) continue;
-
-        lineNumber++;
-
-        // название/описание/коэффициент/тип
-        QStringList parts = line.split('/');
-
-        QString name = parts.value(0).trimmed();
-        QString description = parts.value(1).trimmed();
-        QString defenseStr = parts.value(2).trimmed();
-        QString type = parts.value(3).trimmed();
-
-        // создаем объект щита
-        QJsonObject shieldJson;
-        shieldJson["name"] = name;
-        shieldJson["description"] = description;
-        shieldJson["protectionType"] = type;
-
-        bool ok;
-        defenseStr.toDouble(&ok);
-        if (ok) {
-            shieldJson["defenseFactor"] = defenseStr.toDouble();
-        } else {
-            shieldJson["defenseFactor"] = defenseStr;
-        }
-
-        shieldsArray.append(shieldJson);
-        addedCount++;
-    }
-
+    QString line = in.readLine();
     file.close();
 
-    // сохраняем в JSON файл
-    if (jsonFile.open(QIODevice::WriteOnly)) {
-        QJsonDocument doc(shieldsArray);
-        jsonFile.write(doc.toJson());
-        jsonFile.close();
-        QMessageBox::information(this, "Успех", QString("Добавлено %1 щитов в shields.json").arg(addedCount));
-    } else {
-        QMessageBox::warning(this, "Ошибка", "Не удалось сохранить файл");
+    if (line.isEmpty()) {
+        QMessageBox::warning(this, "Ошибка", "Файл пуст");
+        return;
     }
+
+    // название/описание/коэффициент/тип
+    QStringList parts = line.split('/');
+
+    if (parts.size() < 4) {
+        QMessageBox::warning(this, "Ошибка", "Неверный формат файла. Ожидается: название/описание/коэффициент/тип");
+        return;
+    }
+
+    // заполняем поля ввода из файла
+    ui->editName->setText(parts[0].trimmed());
+    ui->editDescription->setText(parts[1].trimmed());
+    ui->editDefenseFactor->setText(parts[2].trimmed());
+
+    // для типа защиты
+    QString type = parts[3].trimmed();
+    int index = ui->comboType->findText(type);
+    if (index != -1) {
+        ui->comboType->setCurrentIndex(index);
+    } else {
+        ui->comboType->addItem(type);
+        ui->comboType->setCurrentText(type);
+    }
+
+    QMessageBox::information(this, "Успех", "Данные из файла загружены в поля ввода");
 }
 
 void ShieldCreator::saveToJson()
@@ -102,6 +77,13 @@ void ShieldCreator::saveToJson()
     QString defenseStr = ui->editDefenseFactor->text().trimmed();
     QString type = ui->comboType->currentText();
 
+    // если все поля пустые, показываем предупреждение
+    if (name.isEmpty() && description.isEmpty() && defenseStr.isEmpty()) {
+        QMessageBox::warning(this, "Ошибка", "Нет данных для сохранения. Заполните поля или загрузите файл.");
+        return;
+    }
+
+    // создаем объект щита
     QJsonObject shieldJson;
     shieldJson["name"] = name;
     shieldJson["description"] = description;
@@ -109,20 +91,24 @@ void ShieldCreator::saveToJson()
 
     bool ok;
     defenseStr.toDouble(&ok);
-    if (ok) {
+    if (ok && !defenseStr.isEmpty()) {
         shieldJson["defenseFactor"] = defenseStr.toDouble();
-    } else {
+    }
+    else {
         shieldJson["defenseFactor"] = defenseStr;
     }
 
     QJsonArray shieldsArray;
     QFile jsonFile("shields.json");
-    if (jsonFile.exists() && jsonFile.open(QIODevice::ReadOnly)) {
-        QByteArray data = jsonFile.readAll();
-        jsonFile.close();
-        QJsonDocument doc = QJsonDocument::fromJson(data);
-        if (doc.isArray()) {
-            shieldsArray = doc.array();
+
+    if (jsonFile.exists() && jsonFile.size() > 0) {
+        if (jsonFile.open(QIODevice::ReadOnly)) {
+            QByteArray data = jsonFile.readAll();
+            jsonFile.close();
+            QJsonDocument doc = QJsonDocument::fromJson(data);
+            if (doc.isArray()) {
+                shieldsArray = doc.array();
+            }
         }
     }
 
@@ -138,7 +124,8 @@ void ShieldCreator::saveToJson()
         ui->editDescription->clear();
         ui->editDefenseFactor->clear();
         ui->comboType->setCurrentIndex(0);
-    } else {
+    }
+    else {
         QMessageBox::warning(this, "Ошибка", "Не удалось сохранить файл");
     }
 }

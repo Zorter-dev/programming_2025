@@ -108,17 +108,17 @@
        </property>
        <item>
         <property name="text">
-         <string>физический</string>
+         <string>physical</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>магический</string>
+         <string>magic</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>общий</string>
+         <string>general</string>
         </property>
        </item>
       </widget>
