@@ -24,6 +24,19 @@ ShieldCreator::~ShieldCreator()
     delete ui;
 }
 
+QString cleanDefenseString(const QString& input)
+{
+    if (input.isEmpty()) return input;
+
+    QString cleaned = input;
+
+    while (cleaned.length() > 1 && cleaned.startsWith('0') && !cleaned.startsWith("0.")) {
+        cleaned.remove(0, 1);
+    }
+
+    return cleaned;
+}
+
 void ShieldCreator::loadFromTxt()
 {
     QString filename = QFileDialog::getOpenFileName(this, "Выберите TXT файл", "", "Текстовые файлы (*.txt)");
@@ -44,7 +57,6 @@ void ShieldCreator::loadFromTxt()
         return;
     }
 
-    // название/описание/коэффициент/тип
     QStringList parts = line.split('/');
 
     if (parts.size() < 4) {
@@ -52,17 +64,20 @@ void ShieldCreator::loadFromTxt()
         return;
     }
 
+    QString defenseStr = parts[2].trimmed();
+    QString cleanedDefense = cleanDefenseString(defenseStr);
+
     // заполняем поля ввода из файла
     ui->editName->setText(parts[0].trimmed());
     ui->editDescription->setText(parts[1].trimmed());
-    ui->editDefenseFactor->setText(parts[2].trimmed());
+    ui->editDefenseFactor->setText(cleanedDefense);
 
-    // для типа защиты
-    QString type = parts[3].trimmed();
+    QString type = parts[3].trimmed().toLower();
     int index = ui->comboType->findText(type);
     if (index != -1) {
         ui->comboType->setCurrentIndex(index);
-    } else {
+    }
+    else {
         ui->comboType->addItem(type);
         ui->comboType->setCurrentText(type);
     }
@@ -75,13 +90,15 @@ void ShieldCreator::saveToJson()
     QString name = ui->editName->text().trimmed();
     QString description = ui->editDescription->text().trimmed();
     QString defenseStr = ui->editDefenseFactor->text().trimmed();
-    QString type = ui->comboType->currentText();
+    QString type = ui->comboType->currentText().toLower();
 
     // если все поля пустые, показываем предупреждение
     if (name.isEmpty() && description.isEmpty() && defenseStr.isEmpty()) {
         QMessageBox::warning(this, "Ошибка", "Нет данных для сохранения. Заполните поля или загрузите файл.");
         return;
     }
+
+    QString cleanedDefense = cleanDefenseString(defenseStr);
 
     // создаем объект щита
     QJsonObject shieldJson;
@@ -90,12 +107,12 @@ void ShieldCreator::saveToJson()
     shieldJson["protectionType"] = type;
 
     bool ok;
-    defenseStr.toDouble(&ok);
-    if (ok && !defenseStr.isEmpty()) {
-        shieldJson["defenseFactor"] = defenseStr.toDouble();
+    double defenseValue = cleanedDefense.toDouble(&ok);
+    if (ok && !cleanedDefense.isEmpty()) {
+        shieldJson["defenseFactor"] = defenseValue;
     }
     else {
-        shieldJson["defenseFactor"] = defenseStr;
+        shieldJson["defenseFactor"] = cleanedDefense;
     }
 
     QJsonArray shieldsArray;
